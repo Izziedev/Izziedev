@@ -1,0 +1,109 @@
+{%load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" type="image/x-icon" href="{% static '/favicon.ico'%}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.2/font/bootstrap-icons.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+        integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+        crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    {%if title%}
+    <title>{{ title }} - {{ site_name }}</title>
+    {%endif%}
+</head>
+
+<body>
+    <div class="container card col-md-7"
+        style="padding:10px;flex-direction:row;justify-content:space-between;background:#fff;min-height:300px;margin-top:15%;bottom:0;right:0;left:0; min-width:300px;">
+        <div class="col-md-4 col-sm-6 margin-auto" style="min-width:200px; float:left;">Test</div>
+        <div class="col-md-7 col-sm-6 margin-auto" style="">
+            <div class="margin-auto" style="margin:0px auto">
+                <h3 style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-weight: 600;">{{title}}</h3>
+            </div>
+            <div class=""
+                style="font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;font-size:16px;font-weight:300;max-width:400px; min-width:200px;margin:0px auto;text-align:left;">
+                <form method="post" onsubmit="loginaction(event)" id="loginform">
+                    {% csrf_token%}
+                    <p>Username or Email<br />
+                    <div style="flex-direction:row;border:1px solid black;width:280px;height:40px;">
+                        <input type="text" id="user" name="thisuser"
+                            style="height:100%;min-width:250px;cursor:pointer;border:none;outline:none"
+                            onkeyup="checkinput()" required>
+                    </div>
+                    </p>
+                    <p>
+
+                        Password: <br />
+                    <div style="flex-direction:row;border:1px solid black;width:280px;"><input type="password"
+                            name="password" id="pass"
+                            style="height:40px;min-width:250px;cursor:pointer;border:none;outline:none" required>
+                        <span id="showhide" style="cursor:pointer;" onclick="showHide()"><i id="toggle"
+                                class="bi-eye-slash-fill"></i></span>
+                    </div>
+                    </p>
+                    <p>
+                        <input type="checkbox" name="" id="" name="rememberme"> Remember password
+                    </p>
+                    <button onclick="loginaction(event)"
+                        style="height:40px;width:300px;background:blue;color:white;size:20px;font-weight: bold;line-height:30px;border-radius:15px;cursor:pointer;border:0px;">
+                        Submit
+                    </button>
+
+                </form>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>
+<script>
+    function checkinput(q) {
+        /// alert("altered");
+        let text = document.getElementById('user');
+        if (text.value.includes('@')) {
+            text.type = 'email';
+        }
+        else {
+            text.type = 'text';
+        }
+    }
+    function showHide() {
+        passtoggle = document.getElementById('pass')
+        icontrigger = document.getElementById('toggle')
+        if (passtoggle.type == 'password') {
+            passtoggle.type = 'text';
+            icontrigger.classList.remove("bi-eye-fill")
+            icontrigger.classList.add("bi-eye-slash-fill")
+
+        }
+        else {
+            passtoggle.type = 'password';
+            icontrigger.classList.add("bi-eye-fill")
+            icontrigger.classList.remove("bi-eye-slash-fill")
+        }
+    }
+    function loginaction(e) {
+        e.preventDefault();
+        let data = $('#loginform').serialize();
+        $.ajax({
+            method: POST,
+            data: data,
+            url: '/api/v1/users/login',
+            beforeSend: () => { console.log('sending') },
+            complete: () => { console.log('data completed') }
+        }).fail(
+            (xhr, status, message) => { console.log(xhr, status, message) }
+        ).done(
+            (dt) => { console.log(dt) }
+        )
+    }
+</script>
