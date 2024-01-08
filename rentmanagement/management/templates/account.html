@@ -24,7 +24,7 @@
     <div class="container card col-md-7"
         style="padding:10px;flex-direction:row;justify-content:space-between;background:#fff;min-height:300px;margin-top:15%;bottom:0;right:0;left:0; min-width:300px;">
         <div class="col-md-4 col-sm-6 margin-auto" style="min-width:200px; float:left;">Test</div>
-        <div class="col-md-7 col-sm-6 margin-auto" style="">
+        <div class="col-md-7 col-sm-6 margin-auto">
             <div class="margin-auto" style="margin:0px auto">
                 <h3 style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-weight: 600;">{{title}}</h3>
             </div>
@@ -95,9 +95,9 @@
         e.preventDefault();
         let data = $('#loginform').serialize();
         $.ajax({
-            method: POST,
+            type: 'POST',
             data: data,
-            url: '/api/v1/users/login',
+            url: '/users/login',
             beforeSend: () => { console.log('sending') },
             complete: () => { console.log('data completed') }
         }).fail(
